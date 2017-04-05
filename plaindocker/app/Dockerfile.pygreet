@@ -1,0 +1,7 @@
+FROM python:3.6
+
+RUN pip install connexion grpcio grpcio-tools
+COPY service_pb2*.py pygreet* /app/
+WORKDIR /app
+EXPOSE 5000
+CMD ["connexion", "run", "pygreet_api.yaml", "-v"]
