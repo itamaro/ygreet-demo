@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+
+  cppgreet:
+    image: cppgreet-svc
+    ports:
+     - "50051:50051"
+
+  pygreet:
+    image: pygreet-svc
+    ports:
+    - "5445:5000"
+    environment:
+      CPPGREETER_SVC: cppgreet
+    links:
+    - cppgreet
