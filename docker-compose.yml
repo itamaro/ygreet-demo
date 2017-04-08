@@ -7,8 +7,12 @@ services:
 
   pygreet:
     image: pygreet-svc
+    command:
+      - run
+      - pygreet_api.yaml
+      - "-v"
     ports:
-    - "5445:5000"
+    - "3000:5000"
     environment:
       CPPGREETER: "cppgreet:50051"
     links:
