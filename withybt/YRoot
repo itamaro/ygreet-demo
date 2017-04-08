@@ -1,0 +1,19 @@
+DockerImage(
+    'cc-builder',
+    start_from='//3rdparty:ubuntu',
+    deps='//3rdparty:grpc-cc'
+)
+
+DockerImage(
+    'py-builder',
+    start_from='//3rdparty:python',
+    deps='//3rdparty:grpc-py'
+)
+
+Alias(
+    '@default',
+    deps=[
+        '//pygreet:pygreet',
+        '//ccgreet:ccgreet',
+    ]
+)

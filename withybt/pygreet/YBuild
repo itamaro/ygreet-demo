@@ -1,0 +1,26 @@
+Python(
+    'pygreet-src',
+    sources='pygreet_svc.py',
+    data='pygreet_api.yaml',
+    deps=[
+        '//3rdparty:connexion',
+        '//3rdparty:grpc-py',
+        '//protos:service-proto-py',
+    ],
+    runtime_params={
+        'ports': '3000:5000',
+    }
+)
+
+PythonApp(
+    'pygreet',
+    main='//connexion',
+    base_image='//:py-builder',
+    image_name='pygreet-svc',
+    truncate_common_parent='pygreet',
+    deps=':pygreet-src',
+    runtime_params={
+        'container_name': 'pygreet-svc',
+        'rm': True,
+    }
+)

@@ -1,0 +1,21 @@
+Proto(
+    'service-proto-cc',
+    sources='service.proto',
+    in_buildenv='//:cc-builder',
+    gen_python=False,
+    gen_python_grpc=False,
+    gen_cpp=True,
+    gen_cpp_grpc=True,
+    copy_generated_to='//build/'
+)
+
+Proto(
+    'service-proto-py',
+    sources='service.proto',
+    in_buildenv='//:py-builder',
+    proto_cmd=['python', '-m', 'grpc_tools.protoc'],
+    gen_python=True,
+    gen_python_grpc=True,
+    gen_cpp=False,
+    gen_cpp_grpc=False,
+)

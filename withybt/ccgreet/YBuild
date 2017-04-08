@@ -1,0 +1,31 @@
+# TODO: replace compile-with-ext-command with real CC builder
+ExtCommand(
+    'compile-greeter-server',
+    cmd=['ccgreet/compile-greeter-server.sh'],
+    in_buildenv='//:cc-builder',
+    deps='//protos:service-proto-cc'
+)
+
+FileGroup(
+    'cc-greeter-bin',
+    files='//build/ccgreet/greeter_server',
+    deps=[
+        ':compile-greeter-server',
+        '//3rdparty:grpc-cc'
+    ],
+    runtime_params={
+        'ports': '50051:50051',
+    }
+)
+
+CppApp(
+    'ccgreet',
+    base_image='//:cc-builder',
+    image_name='cppgreet-svc',
+    deps=':cc-greeter-bin',
+    executable='//build/ccgreet/greeter_server',
+    runtime_params={
+        'container_name': 'ccgreet-svc',
+        'rm': True,
+    }
+)
