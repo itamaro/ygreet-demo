@@ -1,0 +1,68 @@
+ExtDockerImage(
+    'ubuntu',
+    image='ubuntu',
+    tag='16.04'
+)
+
+ExtDockerImage(
+    'python',
+    image='python',
+    tag='3.6'
+)
+
+AptPackage('autoconf', package='autoconf')
+AptPackage('automake', package='automake')
+AptPackage('build-essential', package='build-essential')
+AptPackage('ca-certificates', package='ca-certificates')
+AptPackage('curl', package='curl')
+AptPackage('gcc', package='g++')
+AptPackage('libtool', package='libtool')
+AptPackage('make', package='make')
+AptPackage('pkg-config', package='pkg-config')
+AptPackage('unzip', package='unzip')
+AptPackage('zlib', package='zlib1g-dev')
+TargetGroup(
+    'build-pack',
+    deps=[
+        ':autoconf',
+        ':automake',
+        ':build-essential',
+        ':ca-certificates',
+        ':curl',
+        ':gcc',
+        ':libtool',
+        ':make',
+        ':pkg-config',
+        ':unzip',
+        ':zlib',
+    ]
+)
+
+CustomInstaller(
+    'protobuf-cc',
+    uri='https://github.com/google/protobuf/archive/v3.2.0.tar.gz',
+    script='install-protobuf-cc.sh',
+    deps=':build-pack'
+)
+
+CustomInstaller(
+    'grpc-cc',
+    uri='https://github.com/grpc/grpc/archive/v1.2.2.tar.gz',
+    script='install-grpc-cc.sh',
+    deps=[
+        ':build-pack',
+        ':protobuf-cc',
+    ]
+)
+
+PythonPackage('grpcio', package='grpcio', version='1.2.1', pip='pip')
+PythonPackage('grpcio-tools', package='grpcio-tools', version='1.2.1', pip='pip')
+TargetGroup(
+    'grpc-py',
+    deps=[
+        ':grpcio',
+        ':grpcio-tools',
+    ]
+)
+
+PythonPackage('connexion', package='connexion', version='1.1.7', pip='pip')

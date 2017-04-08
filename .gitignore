@@ -3,3 +3,6 @@
 *.pb.h
 *_pb2*
 greeter_server
+
+yabtwork
+ybt_bin
