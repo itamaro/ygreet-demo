@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cppgreet-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 50051
+    targetPort: rpc
+    name: rpc
+  selector:
+    service: cppgreet
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pygreet-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5000
+    targetPort: api
+    name: api
+  selector:
+    service: pygreet
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cppgreet
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: cppgreet
+        version: "0.1"
+    spec:
+      containers:
+      - name: cppgreet-app
+        image: gcr.io/$PROJECT_ID/cppgreet-svc
+        command: ["/greeter_server"]
+        ports:
+        - name: rpc
+          containerPort: 50051
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pygreet
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: pygreet
+        version: "0.1"
+    spec:
+      containers:
+      - name: pygreet-app
+        image: gcr.io/$PROJECT_ID/pygreet-svc
+        command: ["connexion", "run", "pygreet_api.yaml", "-v"]
+        ports:
+        - name: api
+          containerPort: 5000
+        env:
+        - name:   CPPGREETER
+          value:  "cppgreet-svc:50051"
+        readinessProbe:
+          httpGet:
+            path: /ui/
+            port: api
+          periodSeconds: 30
+          timeoutSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
