@@ -1,0 +1,22 @@
+swagger: '2.0'
+info:
+  title: Hello API
+  version: "v1"
+paths:
+  /greeting:
+    get:
+      operationId: pygreet_svc.say_hello
+      summary: Returns a greeting.
+      parameters:
+        - name: name
+          in: query
+          type: string
+      responses:
+        200:
+          description: Successful response.
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Message greeting

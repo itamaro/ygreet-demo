@@ -1,0 +1,4 @@
+FROM ygreet-cpp-builder
+COPY greeter_server /
+EXPOSE 50051
+CMD ["/greeter_server"]
