@@ -26,8 +26,6 @@ cd into `containerbuilder` dir, and run `gcloud container builds submit --config
 
 Install YABT (requires Python >= 3.4) - `pip3 install ybt`, cd into `withybt` directory, and run `ybt build`.
 
-Note (TODO) - requires yet-unreleased version of YABT...
-
 ## How to run the stack
 
 1. Running locally
