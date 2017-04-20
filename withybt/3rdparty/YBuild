@@ -47,7 +47,7 @@ CustomInstaller(
 
 CustomInstaller(
     'grpc-cc',
-    uri='https://github.com/grpc/grpc/archive/v1.2.2.tar.gz',
+    uri='https://github.com/grpc/grpc/archive/v1.2.4.tar.gz',
     script='install-grpc-cc.sh',
     deps=[
         ':build-pack',
@@ -65,4 +65,4 @@ TargetGroup(
     ]
 )
 
-PythonPackage('connexion', package='connexion', version='1.1.7', pip='pip')
+PythonPackage('connexion', package='connexion', version='1.1.9', pip='pip')

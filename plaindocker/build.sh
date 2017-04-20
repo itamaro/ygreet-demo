@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Building builder images"
-docker build -t ygreet-builder:latest -f builder/Dockerfile.cppgo builder
+docker build -t ygreet-builder:latest -f builder/Dockerfile.cpp builder
 docker build -t ygreet-pybuild:latest -f builder/Dockerfile.python builder
 
 echo "Making artifacts"
