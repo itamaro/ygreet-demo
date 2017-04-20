@@ -47,7 +47,7 @@ docker tag gcr.io/$PROJECT_ID/cppgreet-svc:latest cppgreet-svc:latest
 docker tag gcr.io/$PROJECT_ID/pygreet-svc:latest pygreet-svc:latest
 ```
 
-## How to deploy the stack to k8s / GKE
+2. Running on k8s / GKE
 
 Assuming you have a k8s / GKE cluster set up, and `kubectl` configured to work with that cluster, you can simply run `./build-and-deploy.sh` from the `containerbuilder` dir to build using Google Container Builder and deploy the resulting images to this k8s cluster (YMMV).
 
