@@ -28,7 +28,7 @@ Install YABT (requires Python >= 3.4) - `pip3 install ybt`, cd into `withybt` di
 
 Note (TODO) - requires yet-unreleased version of YABT...
 
-## How to run to stack
+## How to run the stack
 
 1. Running locally
 
