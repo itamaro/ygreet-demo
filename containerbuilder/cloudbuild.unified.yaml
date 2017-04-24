@@ -1,5 +1,7 @@
 steps:
 
+# Build C++ builder image
+# (prefetch third party gRPC straight from GitHub before running docker build)
 - name: gcr.io/cloud-builders/git
   dir: builder
   args: ['clone', '-b', 'v1.2.4', 'https://github.com/grpc/grpc']
@@ -10,24 +12,30 @@ steps:
 - name: gcr.io/cloud-builders/docker
   dir: builder
   args: ['build', '-t', 'ygreet-cpp-builder', '-f', 'Dockerfile.cpp', '.']
+# Compile proto to C++ using protoc with gRPC plugin
+# and build service binary with gcc
 - name: gcr.io/cloud-builders/docker
   dir: app
   args: ['run', '-t', '--rm', '-v', '/workspace:/workspace',
          '-w', '/workspace/app', 'ygreet-cpp-builder', './build-cpp.sh']
+# Build service Docker image
+# (based on builder image, for build-efficiency, trading-off image-size efficiency)
 - name: gcr.io/cloud-builders/docker
   dir: app
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/cppgreet-svc', '-f', 'Dockerfile.cppgreet', '.']
 
-
+# Build Python builder image
 - name: gcr.io/cloud-builders/docker
   dir: builder
   args: ['build', '-t', 'ygreet-py-builder', '-f', 'Dockerfile.python', '.']
   id: py-builder
   waitFor: '-'
+# Compile proto to Python using protoc gRPC compiler
 - name: gcr.io/cloud-builders/docker
   dir: app
   args: ['run', '-t', '--rm', '-v', '/workspace:/workspace', '-w', '/workspace/app',
          'ygreet-py-builder',  '-I.', '--python_out=.', '--grpc_python_out=.', 'service.proto']
+# Build service Docker image
 - name: gcr.io/cloud-builders/docker
   dir: app
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/pygreet-svc', '-f', 'Dockerfile.pygreet', '.']

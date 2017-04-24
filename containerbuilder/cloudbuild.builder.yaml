@@ -1,0 +1,27 @@
+steps:
+
+# Build C++ builder image
+# (prefetch third party gRPC straight from GitHub before running docker build)
+- name: gcr.io/cloud-builders/git
+  dir: builder
+  args: ['clone', '-b', 'v1.2.4', 'https://github.com/grpc/grpc']
+  waitFor: '-'
+- name: gcr.io/cloud-builders/git
+  dir: builder/grpc
+  args: ['submodule', 'update', '--init']
+- name: gcr.io/cloud-builders/docker
+  dir: builder
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/ygreet-cpp-builder', '-f', 'Dockerfile.cpp', '.']
+
+# Build Python builder image
+- name: gcr.io/cloud-builders/docker
+  dir: builder
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/ygreet-py-builder', '-f', 'Dockerfile.python', '.']
+  id: py-builder
+  waitFor: '-'
+
+images:
+- gcr.io/$PROJECT_ID/ygreet-cpp-builder
+- gcr.io/$PROJECT_ID/ygreet-py-builder
+
+timeout: 1800s
