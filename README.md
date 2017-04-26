@@ -20,7 +20,16 @@ cd into the `plaindocker` dir, and run `./build.sh`.
 
 2. Google Container Builder
 
-cd into `containerbuilder` dir, and run `gcloud container builds submit --config cloudbuild.yaml .`.
+cd into `containerbuilder` dir, and run `gcloud container builds submit --config cloudbuild.unified.yaml .`.
+
+The `unified` YAML builds both the builder images and app images, and is a rather long process. Since the builder images don't change often, it is useful to separate the flows, and rebuild the builder images only when needed:
+
+```
+# build builder images
+gcloud container builds submit --config cloudbuild.builder.yaml .
+# build app images
+gcloud container builds submit --config cloudbuild.app.yaml .
+```
 
 3. YABT
 
