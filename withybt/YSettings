@@ -1,0 +1,8 @@
+BASE_IMAGE_VERSION = 'v1'
+APP_VERSION = 'latest'
+
+def extend_cli(parser):
+  parser.add('--project-id', help='Google Cloud Project ID')
+
+def extend_config(config, args):
+  config.project_id = args.project_id

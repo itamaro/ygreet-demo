@@ -1,3 +1,5 @@
+from yabt.docker import deployable_caching_behavior
+
 # TODO: replace compile-with-ext-command with real CC builder
 ExtCommand(
     'compile-greeter-server',
@@ -27,5 +29,9 @@ CppApp(
     runtime_params={
         'container_name': 'ccgreet-svc',
         'rm': True,
-    }
+    },
+    image_caching_behavior=deployable_caching_behavior(
+        conf,
+        remote_image_name='gcr.io/{}/ccgreet-svc'.format(conf.project_id),
+        remote_image_tag=conf.settings.APP_VERSION)
 )

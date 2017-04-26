@@ -22,7 +22,10 @@ cd into the `plaindocker` dir, and run `./build.sh`.
 
 cd into `containerbuilder` dir, and run `gcloud container builds submit --config cloudbuild.unified.yaml .`.
 
-The `unified` YAML builds both the builder images and app images, and is a rather long process. Since the builder images don't change often, it is useful to separate the flows, and rebuild the builder images only when needed:
+The `unified` YAML builds both the builder images and app images,
+and is a rather long process.
+Since the builder images don't change often, it is useful to separate the flows,
+and rebuild the builder images only when needed:
 
 ```
 # build builder images
@@ -33,7 +36,19 @@ gcloud container builds submit --config cloudbuild.app.yaml .
 
 3. YABT
 
-Install YABT (requires Python >= 3.4) - `pip3 install ybt`, cd into `withybt` directory, and run `ybt build`.
+Install YABT (requires Python >= 3.4) - `pip3 install ybt`, cd into `withybt` directory, and run `make`.
+
+This builds both builder images and app images.
+As with the container builder, the builder images take a while to build,
+and don't change often, so it can be useful so build and cache them using
+`ybt build :builders --project-id $PROJECT_ID --build-base-images --push`
+(the `--push` flag also pushes the cached images to `gcr.io`,
+so other developers can use the cached images without rebuilding them).
+With cached builder images, build and push just the app images using
+`ybt build --project-id $PROJECT_ID --push`
+(this command will fail if it is unable to find / fetch cached build images).
+
+Note: probably need to run `gcloud docker -a` before all these commands.
 
 ## How to run the stack
 

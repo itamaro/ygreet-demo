@@ -1,3 +1,5 @@
+from yabt.docker import deployable_caching_behavior
+
 Python(
     'pygreet-src',
     sources='pygreet_svc.py',
@@ -22,5 +24,9 @@ PythonApp(
     runtime_params={
         'container_name': 'pygreet-svc',
         'rm': True,
-    }
+    },
+    image_caching_behavior=deployable_caching_behavior(
+        conf,
+        remote_image_name='gcr.io/{}/pygreet-svc'.format(conf.project_id),
+        remote_image_tag=conf.settings.APP_VERSION)
 )

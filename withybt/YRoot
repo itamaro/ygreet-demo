@@ -1,13 +1,31 @@
+from yabt.docker import base_image_caching_behavior
+
 DockerImage(
     'cc-builder',
     start_from='//3rdparty:ubuntu',
-    deps='//3rdparty:grpc-cc'
+    deps='//3rdparty:grpc-cc',
+    image_caching_behavior=base_image_caching_behavior(
+        conf,
+        remote_image_name='gcr.io/{}/cc-builder'.format(conf.project_id),
+        remote_image_tag=conf.settings.BASE_IMAGE_VERSION)
 )
 
 DockerImage(
     'py-builder',
     start_from='//3rdparty:python',
-    deps='//3rdparty:grpc-py'
+    deps='//3rdparty:grpc-py',
+    image_caching_behavior=base_image_caching_behavior(
+        conf,
+        remote_image_name='gcr.io/{}/py-builder'.format(conf.project_id),
+        remote_image_tag=conf.settings.BASE_IMAGE_VERSION)
+)
+
+Alias(
+    'builders',
+    deps=[
+        ':cc-builder',
+        ':py-builder',
+    ]
 )
 
 Alias(
